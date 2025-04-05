@@ -68,3 +68,34 @@ else{
 
 }
 
+exports.updatepassword = async (req, res) => {
+  const { username, password, newPassword } = req.body;
+  
+
+  try {
+    const existingUser = await users.findOne({ username });
+
+    if (existingUser) {
+      if (existingUser.password === password) {
+        const updateResult = await users.updateOne(
+          { username },
+          { $set: { password: newPassword } }
+        );
+
+        if (updateResult.modifiedCount > 0) {
+          res.status(200).json('Password updated successfully!');
+        } else {
+          res.status(400).json('No changes made to the password.');
+        }
+      } else {
+        res.status(401).json('Incorrect current password.');
+      }
+    } else {
+      res.status(404).json('User not found.');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'An error occurred while updating the password.', error: err });
+  }
+};
+
