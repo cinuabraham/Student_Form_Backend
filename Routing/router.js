@@ -11,7 +11,7 @@ const router = new express.Router()
 router.post('/user/signup',userController.signup)//register - path to resolve register request
 router.post('/user/login',userController.login)//login
 router.post('/formdatas/submit',jwtMiddleWare,multerConfig.single("IdImage"),formdataController.submitdata)//submit data
-
+router.put('/user/updatepassword',userController.updatepassword)
 
 
 module.exports = router
